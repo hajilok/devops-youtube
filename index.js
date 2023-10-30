@@ -33,11 +33,7 @@ app.get("/api/deploy/:key", async (req, res) => {
     execshell(install)
     execshell(build)
 
-
-
-
-
-    res.status(200).send({ status: "success", data: handle });
+    res.status(200).send({ status: "success", data: "deployed" });
 
 
 
