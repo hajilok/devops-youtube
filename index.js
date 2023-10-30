@@ -9,10 +9,10 @@ app.use(cors())
 app.use(express.json())
 
 
-const addacount = `git config --global user.name "Yuki Kato"`
-const addemail = `git config --global user.email "yukikatodo@gmail.com"`
-const remote = "git remote add origin https://gitlab.com/yukikatodo/youtube-live-streaming.git"
-const addtogit = "git add .gitlab.ci.yml"
+const addacount = `git config --global user.name "imamwahyu"`
+const addemail = `git config --global user.email "imamwahyu635@gmail.com"`
+const remote = "git remote add origin https://imamwahyu@bitbucket.org/gohashindi/youtube-live-streaming.git"
+const addtogit = "git add bitbucket-pipelines.yml"
 const commit = `git commit -m "update stream key"`
 const push = "git push --set-upstream origin main"
 
@@ -38,9 +38,9 @@ app.get("/api/deploy/:key", (req, res) => {
 
     const editFile = async (skey) => {
         try {
-            const data = await fs.readFile('.gitlab-ci.yml', 'utf8');
-            const result = data.replace(/STREAM_KEY: .*/, `STREAM_KEY: ${skey}`);
-            await fs.writeFile('.gitlab-ci.yml', result, 'utf8');
+            const data = await fs.readFile('bitbucket-pipelines.yml', 'utf8');
+            const result = data.replace(/streamkey= .*/, `streamkey=${skey}`);
+            await fs.writeFile('bitbucket-pipelines.yml', result, 'utf8');
             console.log('File updated successfully');
         } catch (err) {
             console.error('Error:', err);
@@ -55,7 +55,6 @@ app.get("/api/deploy/:key", (req, res) => {
             await execshell(addemail);
             const nextkey = await editFile(gkey);
             await execshell(remote);
-            await execshell(addtogit);
             await execshell(commit);
             await execshell(push);
 

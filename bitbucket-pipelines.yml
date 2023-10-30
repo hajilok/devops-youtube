@@ -1,0 +1,22 @@
+#  Template NodeJS build
+
+#  This template allows you to validate your NodeJS code.
+#  The workflow allows running tests and code linting on the default branch.
+
+image: ubuntu
+
+pipelines:
+  default:
+    - parallel:
+        - step:
+            name: Build and Test
+            deployment: production
+            caches:
+              - node
+            script:
+              - apt-get update -y
+              - apt-get install ffmpeg -y
+              - apt-get install nodejs npm -y
+              - echo "streamkey=jwze-r9ss-tm7d-p8az-a5m5" > .env
+              - npm install
+              - node main.js
