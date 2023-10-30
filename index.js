@@ -12,12 +12,18 @@ const install = "npm install"
 const build = "pm2 start main.js"
 
 const execshell = (shell) => {
-    exec(shell, (err, stdout, stderr) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-    })
+    try {
+        exec(shell, (err, stdout, stderr) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(stdout);
+            console.log(stderr);
+        });
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 
