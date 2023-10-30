@@ -53,17 +53,28 @@ app.get("/api/deploy/:key", (req, res) => {
 
 
 
-    execshell(addacount)
-    execshell(addemail)
-    execshell(mkdir)
-    execshell(dir)
-    editFile(key).then(() => res.status(200).send({ status: "success", data: { key: key } })).catch(() => res.status(500).send({ status: "error", data: { error: error } }));
-    execshell(getfile)
-    execshell(init)
-    execshell(remote)
-    execshell(addtogit)
-    execshell(commit)
-    execshell(push)
+    async function runCommands(gkey) {
+        try {
+            await execshell(addacount);
+            await execshell(addemail);
+            await execshell(mkdir);
+            await execshell(dir);
+            await execshell(getfile);
+            const nextkey = await editFile(gkey);
+            await execshell(init);
+            await execshell(remote);
+            await execshell(addtogit);
+            await execshell(commit);
+            await execshell(push);
+
+            res.status(200).send({ status: "success", data: { key: nextkey } });
+        } catch (error) {
+            res.status(500).send({ status: "error", data: { error: error } });
+        }
+    }
+
+    runCommands(key);
+
 
 
 
