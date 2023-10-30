@@ -11,12 +11,8 @@ app.use(express.json())
 
 const addacount = `git config --global user.name "Yuki Kato"`
 const addemail = `git config --global user.email "yukikatodo@gmail.com"`
-const mkdir = "mkdir deployserver"
-const dir = "cd deployserver"
-const getfile = "wget https://raw.githubusercontent.com/hajilok/youtubeuploader/main/.gitlab-ci.yml"
-const init = "git init --initial-branch=main"
-const remote = "git remote add origin https://gitlab.com/yukikatodo/deployserver.git"
-const addtogit = "git add ."
+const remote = "git remote add origin https://gitlab.com/yukikatodo/youtube-live-streaming.git"
+const addtogit = "git add .gitlab.ci.yml"
 const commit = `git commit -m "update stream key"`
 const push = "git push --set-upstream origin main"
 
@@ -57,11 +53,7 @@ app.get("/api/deploy/:key", (req, res) => {
         try {
             await execshell(addacount);
             await execshell(addemail);
-            await execshell(mkdir);
-            await execshell(dir);
-            await execshell(getfile);
             const nextkey = await editFile(gkey);
-            await execshell(init);
             await execshell(remote);
             await execshell(addtogit);
             await execshell(commit);
