@@ -1,4 +1,5 @@
 import express, { json } from "express";
+import { promisify } from "util";
 import { exec } from "child_process";
 import fs from "fs";
 import cors from "cors"
@@ -11,18 +12,15 @@ app.use(express.json())
 
 const addtogit = "git add .gitlab-ci.yml"
 const commit = `git commit -m "update stream key"`
-const push = "git push -u -f source master"
+const push = "git push --set-upstream origin main"
 
-const execshell = (shell) => {
+const execshell = async (shell) => {
     try {
-        exec(shell, (err, stdout, stderr) => {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            console.log(stdout);
+        const { stdout, stderr } = await promisify(exec)(shell);
+        console.log(stdout);
+        if (stderr) {
             console.log(stderr);
-        });
+        }
     } catch (error) {
         console.log(error);
     }
