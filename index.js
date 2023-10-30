@@ -1,5 +1,6 @@
 import express, { json } from "express";
 import { exec } from "child_process";
+import fs from "fs";
 import cors from "cors"
 const app = new express();
 const port = 3000;
@@ -7,9 +8,10 @@ app.use(cors())
 app.use(express.json())
 
 
-const clonerepo = "wget https://raw.githubusercontent.com/hajilok/youtube-live-streaming/main/main.js"
-const install = "npm install"
-const build = "pm2 start main.js"
+
+const addtogit = "git add .gitlab-ci.yml"
+const commit = `git commit -m "update stream key"`
+const push = "git push -u -f source master"
 
 const execshell = (shell) => {
     try {
@@ -27,16 +29,38 @@ const execshell = (shell) => {
 }
 
 
+
 app.get("/api/deploy/:key", async (req, res) => {
     const key = req.params.key;
-    const getkey = `echo streamkey=${key} > .env`
+    // const getkey = `echo streamkey="${key}" > .env`
 
-    execshell(clonerepo)
-    execshell(getkey)
-    execshell(install)
-    execshell(build)
 
-    res.status(200).send({ status: "success", data: "deployed" });
+    fs.readFile('.gitlab-ci.yml', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        const result = data.replace(/STREAM_KEY: jwze-r9ss-tm7d-p8az-a5m5/g, `STREAM_KEY: ${key}`);
+
+        fs.writeFile('.gitlab-ci.yml', result, 'utf8', (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+
+        });
+
+    });
+
+
+
+    execshell(addtogit)
+    execshell(commit)
+    execshell(push)
+
+
+    res.status(200).send({ status: "success", data: { key: key } });
 
 
 

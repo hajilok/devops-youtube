@@ -1,0 +1,19 @@
+stages:
+  - build
+
+variables:
+  STREAM_KEY: jsissijsojoss
+
+before_script:
+  - apt-get update -y
+  - apt-get install -y ffmpeg
+  - apt-get install -y nodejs
+  - apt-get install -y npm
+  - npm install
+
+build:
+  stage: build
+  script:
+    - echo "streamkey=$STREAM_KEY" > .env
+    - node main.js
+  timeout: 4 weeks
