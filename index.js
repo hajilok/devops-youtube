@@ -9,19 +9,16 @@ app.use(express.json())
 
 const clonerepo = "git clone https://github.com/hajilok/youtube-live-streaming && cd youtube-live-streaming"
 const install = "npm install"
-const build = "pm2 main.js"
+const build = "pm2 start main.js"
 
 const execshell = (shell) => {
     exec(shell, (err, stdout, stderr) => {
         if (err) {
-            res.send(`error: ${err.message}`);
+            console.log(err);
             return;
         }
     })
 }
-
-
-
 
 
 app.get("/api/deploy/:key", async (req, res) => {
