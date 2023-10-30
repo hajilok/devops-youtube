@@ -35,23 +35,29 @@ app.get("/api/deploy/:key", async (req, res) => {
     // const getkey = `echo streamkey="${key}" > .env`
 
 
-    fs.readFile('.gitlab-ci.yml', 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-
-        const result = data.replace(/STREAM_KEY: jwze-r9ss-tm7d-p8az-a5m5/g, `STREAM_KEY: ${key}`);
-
-        fs.writeFile('.gitlab-ci.yml', result, 'utf8', (err) => {
+    const editfile = (skey) => {
+        fs.readFile('.gitlab-ci.yml', 'utf8', (err, data) => {
             if (err) {
                 console.error(err);
                 return;
             }
 
+            const result = data.replace(/STREAM_KEY: .*/, `STREAM_KEY: ${skey}`);
+
+            fs.writeFile('.gitlab-ci.yml', result, 'utf8', (err) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+
+            });
+
         });
 
-    });
+
+    }
+
+    editfile(key)
 
 
 
