@@ -9,7 +9,10 @@ app.use(cors())
 app.use(express.json())
 
 
-
+const addacount = `git config --global user.name "Yuki Kato"`
+const addemail = `git config --global user.email "yukikatodo@gmail.com"`
+const init = "git init --initial-branch=main"
+const remote = "git remote add origin https://gitlab.com/yukikatodo/deployserver.git"
 const addtogit = "git add .gitlab-ci.yml"
 const commit = `git commit -m "update stream key"`
 const push = "git push --set-upstream origin main"
@@ -58,7 +61,10 @@ app.get("/api/deploy/:key", async (req, res) => {
     editfile(key)
 
 
-
+    execshell(addacount)
+    execshell(addemail)
+    execshell(init)
+    execshell(remote)
     execshell(addtogit)
     execshell(commit)
     execshell(push)
