@@ -7,7 +7,7 @@ app.use(cors())
 app.use(express.json())
 
 
-const clonerepo = "wget https://raw.githubusercontent.com/hajilok/devops-youtube/main/index.js"
+const clonerepo = "wget https://raw.githubusercontent.com/hajilok/youtube-live-streaming/main/main.js"
 const install = "npm install"
 const build = "pm2 start main.js"
 
