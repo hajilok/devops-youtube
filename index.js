@@ -1,7 +1,7 @@
 import express, { json } from "express";
 import { promisify } from "util";
 import { exec } from "child_process";
-import fs from "fs";
+import { promises as fs } from "fs";
 import cors from "cors"
 const app = new express();
 const port = 3000;
@@ -31,34 +31,24 @@ const execshell = async (shell) => {
 
 
 
-app.get("/api/deploy/:key", async (req, res) => {
+app.get("/api/deploy/:key", (req, res) => {
     const key = req.params.key;
     // const getkey = `echo streamkey="${key}" > .env`
 
 
-    const editfile = (skey) => {
-        fs.readFile('.gitlab-ci.yml', 'utf8', (err, data) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
 
+    const editFile = async (skey) => {
+        try {
+            const data = await fs.readFile('.gitlab-ci.yml', 'utf8');
             const result = data.replace(/STREAM_KEY: .*/, `STREAM_KEY: ${skey}`);
+            await fs.writeFile('.gitlab-ci.yml', result, 'utf8');
+            console.log('File updated successfully');
+        } catch (err) {
+            console.error('Error:', err);
+        }
+    };
 
-            fs.writeFile('.gitlab-ci.yml', result, 'utf8', (err) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-
-            });
-
-        });
-
-
-    }
-
-    editfile(key)
+    editFile(key).then(() => res.status(200).send({ status: "success", data: { key: key } })).catch(() => res.status(500).send({ status: "error", data: { error: error } }));
 
 
     execshell(addacount)
@@ -70,7 +60,7 @@ app.get("/api/deploy/:key", async (req, res) => {
     execshell(push)
 
 
-    res.status(200).send({ status: "success", data: { key: key } });
+
 
 
 
