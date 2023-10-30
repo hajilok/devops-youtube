@@ -54,6 +54,7 @@ app.get("/api/deploy/:key", (req, res) => {
             await execshell(addacount);
             await execshell(addemail);
             const nextkey = await editFile(gkey);
+            await execshell(addtogit);
             await execshell(remote);
             await execshell(commit);
             await execshell(push);
